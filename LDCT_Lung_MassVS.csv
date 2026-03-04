@@ -1,0 +1,24 @@
+valueSet,code,Chinese,English,System
+LungMassLocationVS,rightUpperLobe,右上葉,Right upper lobe,https://example.org/codesystem/ldct-lung-mass
+LungMassLocationVS,rightMiddleLobe,右中葉,Right middle lobe,https://example.org/codesystem/ldct-lung-mass
+LungMassLocationVS,rightLowerLobe,右下葉,Right lower lobe,https://example.org/codesystem/ldct-lung-mass
+LungMassLocationVS,leftUpperLobe,左上葉,Left upper lobe,https://example.org/codesystem/ldct-lung-mass
+LungMassLocationVS,leftLowerLobe,左下葉,Left lower lobe,https://example.org/codesystem/ldct-lung-mass
+LungMassLocationVS,lingula,舌葉,Lingula,https://example.org/codesystem/ldct-lung-mass
+LungMassLocationVS,central,中央型,Central,https://example.org/codesystem/ldct-lung-mass
+LungMassLocationVS,peripheral,周邊型,Peripheral,https://example.org/codesystem/ldct-lung-mass
+LungMassShapeVS,round,圓形,Round,https://example.org/codesystem/ldct-lung-mass
+LungMassShapeVS,oval,橢圓形,Oval,https://example.org/codesystem/ldct-lung-mass
+LungMassShapeVS,irregular,不規則,Irregular,https://example.org/codesystem/ldct-lung-mass
+LungMassShapeVS,polygonal,多角形,Polygonal,https://example.org/codesystem/ldct-lung-mass
+LungMassShapeVS,spiculatedShape,星芒狀,Spiculated shape,https://example.org/codesystem/ldct-lung-mass
+LungMassMarginVS,smooth,平滑,Smooth,https://example.org/codesystem/ldct-lung-mass
+LungMassMarginVS,spiculated,毛刺狀,Spiculated,https://example.org/codesystem/ldct-lung-mass
+LungMassMarginVS,lobulated,分葉狀,Lobulated,https://example.org/codesystem/ldct-lung-mass
+LungMassMarginVS,illDefined,邊界不清,Ill-defined,https://example.org/codesystem/ldct-lung-mass
+LungMassMarginVS,wellDefined,邊界清楚,Well-defined,https://example.org/codesystem/ldct-lung-mass
+LungMassDensityVS,solid,實性,Solid,https://example.org/codesystem/ldct-lung-mass
+LungMassDensityVS,partSolid,部分實性,Part-solid,https://example.org/codesystem/ldct-lung-mass
+LungMassDensityVS,groundGlass,毛玻璃樣,Ground-glass opacity,https://example.org/codesystem/ldct-lung-mass
+LungMassDensityVS,cavitary,空洞性,Cavitary,https://example.org/codesystem/ldct-lung-mass
+LungMassDensityVS,calcified,鈣化,Calcified,https://example.org/codesystem/ldct-lung-mass
