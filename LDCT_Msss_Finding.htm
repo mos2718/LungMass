@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>LDCT Lung Mass Form</title>
+<style>
+body { font-family: Arial; margin: 40px; }
+.section { margin-bottom: 20px; }
+label { margin-right: 15px; }
+button { padding: 8px 15px; font-size: 16px; }
+pre { background: #f4f4f4; padding: 15px; overflow-x: auto; }
+.error { color: red; }
+.success { color: green; }
+</style>
+</head>
+<body>
+
+<h2>LDCT Lung Mass Morphology Form</h2>
+
+<form id="massForm">
+
+<div class="section">
+<label>Mass Size (mm): </label>
+<input type="text" id="massSize" required />
+</div>
+
+<div class="section">
+<h4>Mass Location</h4>
+<div id="LungMassLocationVS"></div>
+</div>
+
+<div class="section">
+<h4>Shape</h4>
+<div id="LungMassShapeVS"></div>
+</div>
+
+<div class="section">
+<h4>Margin</h4>
+<div id="LungMassMarginVS"></div>
+</div>
+
+<div class="section">
+<h4>Density</h4>
+<div id="LungMassDensityVS"></div>
+</div>
+
+<button type="submit">Submit to FHIR Server</button>
+
+</form>
+
+<h3>Result</h3>
+<div id="result"></div>
+
+<script>
+
+const csvUrl = "https://mos2718.github.io/LungMass/LDCT_Lung_MassVS.csv";
+const fhirServer = "https://hapi.fhir.org/baseR4/Observation";
+const patientId = "90357063";
+//"53688389";
+
+async function loadCSV() {
+    const response = await fetch(csvUrl);
+    const text = await response.text();
+    const rows = text.split("\n").slice(1);
+
+    rows.forEach(row => {
+        if (!row.trim()) return;
+
+        const [valueSet, code, chinese, english, system] = row.split(",");
+
+        const container = document.getElementById(valueSet);
+        if (!container) return;
+
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = valueSet;
+        radio.value = JSON.stringify({code, english, system});
+        radio.required = true;
+
+        const label = document.createElement("label");
+        label.appendChild(radio);
+        label.appendChild(document.createTextNode(chinese + " (" + english + ")"));
+
+        container.appendChild(label);
+    });
+}
+
+function getSelectedValue(name) {
+    const selected = document.querySelector('input[name="' + name + '"]:checked');
+    if (!selected) return null;
+    return JSON.parse(selected.value);
+}
+
+document.getElementById("massForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const massSize = document.getElementById("massSize").value;
+
+    const location = getSelectedValue("LungMassLocationVS");
+    const shape = getSelectedValue("LungMassShapeVS");
+    const margin = getSelectedValue("LungMassMarginVS");
+    const density = getSelectedValue("LungMassDensityVS");
+
+    const observation = {
+        resourceType: "Observation",
+        status: "final",
+        category: [{
+            coding: [{
+                system: "http://terminology.hl7.org/CodeSystem/observation-category",
+                code: "imaging",
+                display: "Imaging"
+            }]
+        }],
+        code: {
+            coding: [{
+                system: "https://example.org/codesystem/ldct-lung-mass",
+                code: "ldct-lung-mass-morphology",
+                display: "LDCT Lung Mass Morphology"
+            }]
+        },
+        subject: {
+            reference: "Patient/" + patientId
+        },
+        effectiveDateTime: new Date().toISOString(),
+        component: [
+            {
+                code: { coding: [location] },
+                valueCodeableConcept: { coding: [location] }
+            },
+            {
+                code: { coding: [shape] },
+                valueCodeableConcept: { coding: [shape] }
+            },
+            {
+                code: { coding: [margin] },
+                valueCodeableConcept: { coding: [margin] }
+            },
+            {
+                code: { coding: [density] },
+                valueCodeableConcept: { coding: [density] }
+            }
+        ],
+        valueQuantity: {
+            value: parseFloat(massSize),
+            unit: "mm",
+            system: "http://unitsofmeasure.org",
+            code: "mm"
+        }
+    };
+
+    try {
+        const response = await fetch(fhirServer, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/fhir+json"
+            },
+            body: JSON.stringify(observation)
+        });
+
+        const resultDiv = document.getElementById("result");
+        const json = await response.json();
+
+        if (response.ok) {
+            resultDiv.innerHTML = "<div class='success'>Success</div><pre>" +
+                JSON.stringify(json, null, 2) + "</pre>";
+        } else {
+            resultDiv.innerHTML = "<div class='error'>Error</div><pre>" +
+                JSON.stringify(json, null, 2) + "</pre>";
+        }
+
+    } catch (error) {
+        document.getElementById("result").innerHTML =
+            "<div class='error'>Connection Error: " + error + "</div>";
+    }
+
+});
+
+loadCSV();
+
+</script>
+
+</body>
+</html>
